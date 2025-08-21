@@ -24,7 +24,6 @@ namespace Blocks
         public override void Pop()
         {
             base.Pop();
-
             Debug.Log("Popped MatchBlock: " + Type + " at position " + GridPosition + ".");
         }
     }

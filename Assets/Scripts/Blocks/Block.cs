@@ -37,16 +37,24 @@ namespace Blocks
         
         public abstract bool IsAffectedByGravity { get; }
         public abstract bool CanBePopped { get; }
-
+        public bool IsPopped { get; protected set; }
         public abstract void Init(BlockSpawnData spawnData);
         public abstract void OnAffectedByPowerUp();
         
-        public event Action<Block> OnBlockPopped;
+        public event Action<Block> OnPopped;
         
         public virtual void Pop()
         {
+            if (IsPopped)
+            {
+                Debug.LogWarning("Trying to pop a block that has already been popped. Block at position " +
+                                 GridPosition + " is already popped.");
+            }
+            
             Debug.Log("Popped Block at position " + GridPosition + ".");
-            OnBlockPopped?.Invoke(this);
+            OnPopped?.Invoke(this);
+            
+            IsPopped = true;
         }
     }
 }

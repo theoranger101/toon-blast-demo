@@ -362,6 +362,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1009104788}
   - component: {fileID: 1009104789}
+  - component: {fileID: 1009104790}
   m_Layer: 0
   m_Name: GridManager
   m_TagString: Untagged
@@ -394,6 +395,19 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6313ab6dc043481aaf3e7e268efd7a12, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_RefillController: {fileID: 1009104790}
+--- !u!114 &1009104790
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1009104787}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bff41d20433e41ae89cdf3e4ba7e4616, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &1495388546

@@ -38,5 +38,7 @@ namespace Data
         
         public float BlockCellSize = 100f;
         public float BlockCellSpacing = 10f;
+        
+        public float BlockMovementDuration = 0.2f;
     }
 }

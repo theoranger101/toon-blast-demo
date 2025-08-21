@@ -42,7 +42,8 @@ namespace Grid.Editor
                     },
                     new BlockSpawnData()
                     {
-                        Category = BlockCategory.Match, MatchBlockType = MatchBlockType.Red,
+                        Category = BlockCategory.PowerUp, PowerUpType = PowerUpType.Rocket,
+                        // Category = BlockCategory.Match, MatchBlockType = MatchBlockType.Yellow,
                         GridPosition = new Vector2Int(1, 1)
                     },
                     new BlockSpawnData()
@@ -79,11 +80,6 @@ namespace Grid.Editor
             if (GUILayout.Button("Print Available Matches"))
             {
                 TargetGridManager.PrintAvailableMatches();
-            }
-
-            if (GUILayout.Button("Pop At"))
-            {
-                TargetGridManager.TryPopAt(new Vector2Int(2, 2));
             }
 
             if (GUILayout.Button("Reset Grid"))

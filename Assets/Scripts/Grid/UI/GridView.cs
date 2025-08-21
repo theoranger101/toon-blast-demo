@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using Blocks;
 using Blocks.UI;
 using Data;
+using DG.Tweening;
 using UnityEngine;
 
 namespace Grid.UI
@@ -13,7 +14,12 @@ namespace Grid.UI
         private Dictionary<Block, BlockView> m_ActiveBlockViews = new();
         
         private GlobalSettings m_Settings;
+        
+        private Sequence m_BlockMovementSequence;
 
+        private float m_DefaultStartPosition =>
+            GridContainer.anchoredPosition.y + GridContainer.rect.height + m_Settings.BlockCellSize;
+        
         private void Awake()
         {
             m_Settings = GlobalSettings.Get();
@@ -21,7 +27,8 @@ namespace Grid.UI
             BlockView.OnBlockViewCreated += AddBlockView;
             BlockView.OnBlockViewDestroyed += RemoveBlockView;
             
-            GridManager.OnBlockMoved += OnBlockMoved;
+            // TODO: block movement to be animated and controlled by other entity
+            GridRefillController.OnBlockMoved += OnBlockMoved;
         }
 
         private void AddBlockView(BlockView view)
@@ -30,7 +37,9 @@ namespace Grid.UI
 
             var viewGridPos = view.Block.GridPosition;
             var anchoredPosition = GetGridToAnchoredPosition(viewGridPos);
-            view.RectTransform.anchoredPosition = anchoredPosition;
+            view.RectTransform.anchoredPosition = m_DefaultStartPosition * Vector2.up + anchoredPosition;
+
+            MoveBlockView(view, anchoredPosition);
             
             m_ActiveBlockViews.Add(view.Block, view);
         }
@@ -51,8 +60,25 @@ namespace Grid.UI
 
         private void OnBlockMoved(Block block)
         {
-            // TODO: gravity animation to be added
-            m_ActiveBlockViews[block].RectTransform.anchoredPosition = GetGridToAnchoredPosition(block.GridPosition);
+            if (!m_ActiveBlockViews.TryGetValue(block, out var blockView))
+            {
+                Debug.LogWarning($"BlockView for block at {block.GridPosition} not found.");
+                return;
+            }
+            
+            var targetPosition =  GetGridToAnchoredPosition(block.GridPosition);
+            MoveBlockView(blockView, targetPosition); 
+        }
+
+        private void MoveBlockView(BlockView view, Vector2 targetPos)
+        {
+            if (m_BlockMovementSequence == null || !m_BlockMovementSequence.IsActive())
+            {
+                m_BlockMovementSequence = DOTween.Sequence();
+            }
+            
+            m_BlockMovementSequence.Join(view.RectTransform.DOAnchorPos(targetPos,
+                m_Settings.BlockMovementDuration, true).SetEase(Ease.OutBounce).SetRecyclable());
         }
     }
 }

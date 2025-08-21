@@ -16,10 +16,11 @@ namespace Blocks.UI
         public static event Action<BlockView> OnBlockViewDestroyed;
         
         public static event Action<Block> OnBlockClicked;
-        public static event Action<Block> OnBlockMoved; 
 
         public void Init(Block block)
         {
+            Debug.Log("Initializing BlockView with block: " + block.GetType().Name);
+            
             Block = block;
             
             // TODO: dummy implementation for testing purposes
@@ -34,12 +35,17 @@ namespace Blocks.UI
                     _ => throw new ArgumentOutOfRangeException()
                 };
             }
-            else
+            else if(block is PowerUpBlock powerUpBlock)
             {
-                // Debug.LogWarning("Block type is not MatchBlock, no sprite assigned.");
+                Image.color = powerUpBlock.Type switch
+                {
+                    PowerUpType.Rocket => Color.cyan,
+                    PowerUpType.Bomb => Color.magenta,
+                    _ => throw new ArgumentOutOfRangeException()
+                };
             }
 
-            block.OnBlockPopped += OnPopped;
+            block.OnPopped += OnPopped;
             Button.onClick.AddListener(OnClick);
             
             OnBlockViewCreated?.Invoke(this);
