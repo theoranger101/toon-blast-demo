@@ -1,9 +1,13 @@
 using System.Collections.Generic;
 using Blocks;
+using Blocks.EventImplementations;
 using Blocks.UI;
+using Blocks.UI.Skins;
 using Data;
 using DG.Tweening;
+using Grid.EventImplementations;
 using UnityEngine;
+using Utilities.Events;
 
 namespace Grid.UI
 {
@@ -16,6 +20,11 @@ namespace Grid.UI
         private GlobalSettings m_Settings;
         
         private Sequence m_BlockMovementSequence;
+        
+        [SerializeField] 
+        private BlockSkinLibrary  m_BlockSkinLibrary; // TODO: INJECT 
+        
+        private BlockViewFactory m_BlockViewFactory; 
 
         private float m_DefaultStartPosition =>
             GridContainer.anchoredPosition.y + GridContainer.rect.height + m_Settings.BlockCellSize;
@@ -23,36 +32,50 @@ namespace Grid.UI
         private void Awake()
         {
             m_Settings = GlobalSettings.Get();
-
-            BlockView.OnBlockViewCreated += AddBlockView;
+            m_BlockViewFactory = new BlockViewFactory(m_BlockSkinLibrary);
+            
+            // BlockView.OnBlockViewCreated += AddBlockView;
             BlockView.OnBlockViewDestroyed += RemoveBlockView;
             
             // TODO: block movement to be animated and controlled by other entity
             GridRefillController.OnBlockMoved += OnBlockMoved;
+            
+            GEM.Subscribe<BlockEvent>(OnBlockAdded, channel:(int)BlockEventType.BlockCreated);
         }
 
-        private void AddBlockView(BlockView view)
+        private void OnBlockAdded(BlockEvent evt)
         {
-            view.RectTransform.SetParent(GridContainer);
-
-            var viewGridPos = view.Block.GridPosition;
-            var anchoredPosition = GetGridToAnchoredPosition(viewGridPos);
-            view.RectTransform.anchoredPosition = m_DefaultStartPosition * Vector2.up + anchoredPosition;
-
-            MoveBlockView(view, anchoredPosition);
+            Debug.Log("Creating view for new block");
             
-            m_ActiveBlockViews.Add(view.Block, view);
+            OnBlockAdded(evt.Block);
+        }
+        
+        private void OnBlockAdded(Block block)
+        {
+            var view = m_BlockViewFactory.SpawnView(block, GridContainer);
+
+            if (view == null)
+            {
+                return;
+            }
+            
+            var targetPos = GridToAnchored(block.GridPosition);
+
+            var startPos = m_DefaultStartPosition * Vector2.up + targetPos; // TODO: can definitely be improved
+            view.RectTransform.anchoredPosition = startPos;
+            
+            MoveBlockView(view, targetPos);
+            
+            m_ActiveBlockViews.Add(block, view);
         }
 
         private void RemoveBlockView(BlockView view)
         {
+            Debug.Log("Removing block view");
             m_ActiveBlockViews.Remove(view.Block);
-            
-            // TODO: Consider using a pooling system instead of destroying the view
-            Destroy(view.gameObject);
         }
 
-        private Vector2 GetGridToAnchoredPosition(Vector2Int gridPosition)
+        private Vector2 GridToAnchored(Vector2Int gridPosition)
         {
             return new Vector2(gridPosition.x * (m_Settings.BlockCellSize + m_Settings.BlockCellSpacing),
                 gridPosition.y * (m_Settings.BlockCellSize + m_Settings.BlockCellSpacing));
@@ -66,10 +89,10 @@ namespace Grid.UI
                 return;
             }
             
-            var targetPosition =  GetGridToAnchoredPosition(block.GridPosition);
+            var targetPosition =  GridToAnchored(block.GridPosition);
             MoveBlockView(blockView, targetPosition); 
         }
-
+        
         private void MoveBlockView(BlockView view, Vector2 targetPos)
         {
             if (m_BlockMovementSequence == null || !m_BlockMovementSequence.IsActive())
@@ -78,7 +101,7 @@ namespace Grid.UI
             }
             
             m_BlockMovementSequence.Join(view.RectTransform.DOAnchorPos(targetPos,
-                m_Settings.BlockMovementDuration, true).SetEase(Ease.OutBounce).SetRecyclable());
+                m_Settings.BlockMovementDuration, true).SetEase(Ease.OutQuad).SetRecyclable());
         }
     }
 }

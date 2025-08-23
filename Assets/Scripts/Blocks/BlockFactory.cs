@@ -1,8 +1,8 @@
 using System;
-using Blocks.UI;
-using Data;
+using Blocks.EventImplementations;
+using Grid.EventImplementations;
+using Utilities.Events;
 using Utilities.Pooling;
-using Object = UnityEngine.Object;
 
 namespace Blocks
 {
@@ -23,11 +23,18 @@ namespace Blocks
             };
 
             block.Init(spawnData);
-
+            
+            using (var createBlockEvt = BlockEvent.Get(block))
+            {
+                createBlockEvt.SendGlobal(channel: (int)BlockEventType.BlockCreated);
+            }
+            
+            /*
             // TODO: dummy implementation for testing purposes
             // TODO: Consider using a pooling system instead of instantiating the view
             var blockView = Object.Instantiate(GlobalSettings.Get().MatchBlockPrefab).GetComponent<BlockView>();
             blockView.Init(block);
+            */
 
             return block;
         }
@@ -46,6 +53,13 @@ namespace Blocks
                     s_ObstacleBlockPool.Release(obstacleBlock);
                     break;
             }
+            
+            /*
+            using (var removeBlockEvt = BlockEvent.Get(block))
+            {
+                removeBlockEvt.SendGlobal(channel: (int)BlockEventType.BlockCreated);
+            }
+            */
         }
     }
 }

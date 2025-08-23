@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d78ed24640994df1ae3fc0e9f6198e04, type: 3}
+  m_Name: BlockSkinLibrary
+  m_EditorClassIdentifier: 
+  DefaultPrefab: {fileID: 8327362633279532473, guid: 19c5fb9eba22b194a853ad38dcd9e1ce, type: 3}
+  Skins:
+  - {fileID: 11400000, guid: 229fd9d1a3e8f4df5bf983359ac32958, type: 2}
+  - {fileID: 11400000, guid: f214548d849a04d0699c6d62424d19ba, type: 2}
+  - {fileID: 11400000, guid: f94e6b15bc13c45b1975a670faea3e8d, type: 2}
+  - {fileID: 11400000, guid: 639ff5d7839794d4e9d3ea271e0f9db9, type: 2}

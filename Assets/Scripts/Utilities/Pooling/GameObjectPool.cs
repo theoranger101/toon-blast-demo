@@ -23,9 +23,9 @@ namespace Utilities.Pooling
             }
         }
 
-        public T Get()
+        public T Get(Transform parent = null)
         {
-            T item = m_Pool.Count > 0 ? m_Pool.Dequeue() : Object.Instantiate(m_Prefab, m_Parent);
+            T item = m_Pool.Count > 0 ? m_Pool.Dequeue() : Object.Instantiate(m_Prefab, parent ?? m_Parent);
             item.gameObject.SetActive(true);
 
             return item;
