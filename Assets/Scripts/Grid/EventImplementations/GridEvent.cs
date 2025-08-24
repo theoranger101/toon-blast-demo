@@ -7,13 +7,12 @@ namespace Grid.EventImplementations
 {
     public enum GridEventType
     {
-        BlockClicked = 0,
-        BlockMoved = 1,
-        TriggerRefill = 3,
-        RequestGrid = 4,
-        RequestAxis = 5,
-        AddBlock = 6,
-        ClearPosition = 7,
+        BlockMoved = 0,
+        TriggerRefill = 1,
+        RequestGrid = 2,
+        RequestAxis = 3,
+        AddBlock = 4,
+        ClearPosition = 5,
     }
     
     public class GridEvent : Event<GridEvent>

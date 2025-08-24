@@ -1,7 +1,8 @@
-using System;
+using Blocks.EventImplementations;
 using Blocks.UI.Skins;
 using UnityEngine;
 using UnityEngine.UI;
+using Utilities.Events;
 
 namespace Blocks.UI
 {
@@ -14,14 +15,7 @@ namespace Blocks.UI
         public Block Block { get; private set; }
         private BlockSkin m_BlockSkin;
         
-        public static event Action<BlockView> OnBlockViewCreated;
-        public static event Action<BlockView> OnBlockViewDestroyed;
-        
-        public static event Action<Block> OnBlockClicked;
-        
-        private event Action<BlockView> ReleaseBlockView;
-
-        public virtual void Init(Block block, BlockSkin skin, Action<BlockView> releaseToPool)
+        public virtual void Init(Block block, BlockSkin skin)
         {
             Debug.Log("Initializing BlockView with block: " + block.GetType());
             
@@ -34,48 +28,37 @@ namespace Blocks.UI
                 Image.SetNativeSize();
             }
             
-            /*
-            // TODO: dummy implementation for testing purposes
-            if(Block is MatchBlock matchBlock)
-            {
-                Image.color = matchBlock.Type switch
-                {
-                    MatchBlockType.Blue => Color.blue,
-                    MatchBlockType.Green => Color.green,
-                    MatchBlockType.Red => Color.red,
-                    MatchBlockType.Yellow => Color.yellow,
-                    _ => throw new ArgumentOutOfRangeException()
-                };
-            }
-            else if(block is PowerUpBlock powerUpBlock)
-            {
-                Image.color = powerUpBlock.Type switch
-                {
-                    PowerUpType.Rocket => Color.cyan,
-                    PowerUpType.Bomb => Color.magenta,
-                    _ => throw new ArgumentOutOfRangeException()
-                };
-            }
-            */
-
-            Button.onClick.RemoveAllListeners();
-            
-            block.OnPopped += OnPopped;
-            Button.onClick.AddListener(OnClick);
-            
-            OnBlockViewCreated?.Invoke(this);
-            
-            ReleaseBlockView = releaseToPool;
-            
-            gameObject.SetActive(true);
+            SubscribeEvents();
         }
 
-        public void OnPopped(Block block)
+        protected virtual void SubscribeEvents()
         {
-            OnBlockViewDestroyed?.Invoke(this);
+            Button.onClick.RemoveAllListeners();
+            Button.onClick.AddListener(OnClick);
             
+            GEM.Subscribe<BlockEvent>(HandleBlockPopped, (int)BlockEventType.BlockPopped);
+        }
+        
+        protected virtual void UnsubscribeEvents()
+        {
+            Button.onClick.RemoveAllListeners();
+            
+            GEM.Unsubscribe<BlockEvent>(HandleBlockPopped, (int)BlockEventType.BlockPopped);
+        }
+
+        private void HandleBlockPopped(BlockEvent blockEvent)
+        {
+            if (blockEvent.Block != Block)
+            {
+                return;
+            }
+            
+            OnPopped();
+        }
+        
+        public void OnPopped()
+        {
             PlayPopSequence();
-            
             OnRelease();
         }
 
@@ -91,7 +74,10 @@ namespace Blocks.UI
         {
             if (Block != null)
             {
-                OnBlockClicked?.Invoke(Block);
+                using (var clickedEvt = BlockEvent.Get(Block))
+                {
+                    clickedEvt.SendGlobal((int)BlockEventType.BlockClicked);
+                }
             }
             else
             {
@@ -101,13 +87,17 @@ namespace Blocks.UI
 
         private void OnRelease()
         {
-            Button.onClick.RemoveAllListeners();
-            Block.OnPopped -= OnPopped;
+            /*
+            using (var releaseEvt = BlockEvent.Get(this))
+            {
+                releaseEvt.SendGlobal((int)BlockEventType.BlockDestroyed);
+            }
+            */
+            
+            UnsubscribeEvents();
             
             Block = null;
             m_BlockSkin = null;
-            
-            ReleaseBlockView?.Invoke(this);
         }
     }
 }

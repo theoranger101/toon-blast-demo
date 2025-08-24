@@ -1,5 +1,6 @@
-using System;
+using Blocks.EventImplementations;
 using UnityEngine;
+using Utilities.Events;
 
 namespace Blocks
 {
@@ -41,8 +42,6 @@ namespace Blocks
         public abstract void Init(BlockSpawnData spawnData);
         public abstract void OnAffectedByPowerUp();
         
-        public event Action<Block> OnPopped;
-        
         public virtual void Pop()
         {
             if (IsPopped)
@@ -52,7 +51,10 @@ namespace Blocks
             }
             
             Debug.Log("Popped Block at position " + GridPosition + ".");
-            OnPopped?.Invoke(this);
+            using (var poppedEvt = BlockEvent.Get(this))
+            {
+                poppedEvt.SendGlobal((int)BlockEventType.BlockPopped);
+            }
             
             IsPopped = true;
         }

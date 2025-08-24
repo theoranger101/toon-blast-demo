@@ -5,7 +5,6 @@ using Blocks.UI;
 using Blocks.UI.Skins;
 using Data;
 using DG.Tweening;
-using Grid.EventImplementations;
 using UnityEngine;
 using Utilities.Events;
 
@@ -34,13 +33,11 @@ namespace Grid.UI
             m_Settings = GlobalSettings.Get();
             m_BlockViewFactory = new BlockViewFactory(m_BlockSkinLibrary);
             
-            // BlockView.OnBlockViewCreated += AddBlockView;
-            BlockView.OnBlockViewDestroyed += RemoveBlockView;
-            
             // TODO: block movement to be animated and controlled by other entity
             GridRefillController.OnBlockMoved += OnBlockMoved;
             
             GEM.Subscribe<BlockEvent>(OnBlockAdded, channel:(int)BlockEventType.BlockCreated);
+            GEM.Subscribe<BlockEvent>(OnBlockRemoved, channel:(int)BlockEventType.BlockPopped);
         }
 
         private void OnBlockAdded(BlockEvent evt)
@@ -69,9 +66,17 @@ namespace Grid.UI
             m_ActiveBlockViews.Add(block, view);
         }
 
+        private void OnBlockRemoved(BlockEvent evt)
+        {
+            var view = m_ActiveBlockViews[evt.Block];
+            RemoveBlockView(view);
+        }
+        
         private void RemoveBlockView(BlockView view)
         {
             Debug.Log("Removing block view");
+            
+            m_BlockViewFactory.ReleaseView(view);
             m_ActiveBlockViews.Remove(view.Block);
         }
 

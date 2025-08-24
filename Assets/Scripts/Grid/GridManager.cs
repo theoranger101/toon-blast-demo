@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Blocks;
-using Blocks.UI;
+using Blocks.EventImplementations;
 using Data;
 using Grid.ClickStrategies;
 using Grid.EventImplementations;
@@ -33,6 +33,9 @@ namespace Grid
             GEM.Subscribe<GridEvent>(HandleBlockAdded, channel:(int)GridEventType.AddBlock);
             GEM.Subscribe<GridEvent>(HandleClearPosition, channel:(int)GridEventType.ClearPosition);
             GEM.Subscribe<GridEvent>(HandleBlockMoved, channel:(int)GridEventType.BlockMoved);
+            
+            GEM.Subscribe<BlockEvent>(HandleBlockPopped, channel:(int)BlockEventType.BlockPopped);
+            GEM.Subscribe<BlockEvent>(HandleBlockClicked, channel:(int)BlockEventType.BlockClicked);
         }
 
         private void OnDestroy()
@@ -42,14 +45,20 @@ namespace Grid
             GEM.Unsubscribe<GridEvent>(HandleClearPosition, channel:(int)GridEventType.ClearPosition);
             GEM.Unsubscribe<GridEvent>(HandleBlockMoved, channel:(int)GridEventType.BlockMoved);
             
-            BlockView.OnBlockClicked -= OnBlockClicked;
+            GEM.Unsubscribe<BlockEvent>(HandleBlockPopped, channel:(int)BlockEventType.BlockPopped);
+            GEM.Unsubscribe<BlockEvent>(HandleBlockClicked, channel:(int)BlockEventType.BlockClicked);
         }
 
         #region Event Handlers
 
-        private void HandleBlockPopped(Block block)
+        private void HandleBlockPopped(BlockEvent evt)
         {
-            RemoveBlock(block.GridPosition);
+            RemoveBlock(evt.Block.GridPosition);
+        }
+
+        private void HandleBlockClicked(BlockEvent evt)
+        {
+            OnBlockClicked(evt.Block);
         }
 
         private void HandleBlockMoved(GridEvent evt)
@@ -86,8 +95,6 @@ namespace Grid
                 
                 AddBlock(block, position);
             }
-
-            BlockView.OnBlockClicked += OnBlockClicked;
         }
         
         public void ResetGrid()
@@ -148,7 +155,7 @@ namespace Grid
 
             m_Grid[gridPosition.x, gridPosition.y] = block;
             block.GridPosition = gridPosition;
-            block.OnPopped += HandleBlockPopped;
+            // block.OnPopped += HandleBlockPopped;
         }
         
         private void RemoveBlock(Vector2Int gridPosition)
@@ -164,7 +171,7 @@ namespace Grid
             var block = m_Grid[gridPosition.x, gridPosition.y];
             if (block == null) return;
 
-            block.OnPopped -= HandleBlockPopped;
+            // block.OnPopped -= HandleBlockPopped;
             m_Grid[gridPosition.x, gridPosition.y] = null;
             
             BlockFactory.ReleaseBlock(block);

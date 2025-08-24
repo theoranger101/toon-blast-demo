@@ -1,6 +1,5 @@
 using System;
 using PowerUps.Strategies;
-using UnityEngine;
 
 namespace Blocks
 {

@@ -10,6 +10,8 @@ namespace Blocks.UI
         private readonly BlockSkinLibrary m_SkinLibrary;
 
         private readonly Dictionary<BlockView, GameObjectPool<BlockView>> m_Pools = new();
+        private readonly Dictionary<BlockView, GameObjectPool<BlockView>> m_InstanceToPool = new();
+
 
         public BlockViewFactory(BlockSkinLibrary skinLibrary)
         {
@@ -25,6 +27,7 @@ namespace Blocks.UI
             
             var pool = new GameObjectPool<BlockView>(blockViewPrefab, parent: parent);
             m_Pools.Add(blockViewPrefab, pool);
+            
             return pool;
         }
 
@@ -49,9 +52,21 @@ namespace Blocks.UI
             var pool = GetOrCreatePool(prefab, parent);
             var view = pool.Get(parent);
             
-            // TODO: check delegate allocation
-            view.Init(block, skin, v => pool.Release(v));
+            view.Init(block, skin);
+            m_InstanceToPool.Add(view, pool);
+            
             return view;
+        }
+
+        public void ReleaseView(BlockView blockView)
+        {
+            if (!m_InstanceToPool.Remove(blockView, out var pool))
+            {
+                Debug.LogError("BlockView is not in any existing pools!");
+                return;
+            }
+
+            pool.Release(blockView);
         }
     }
 }
