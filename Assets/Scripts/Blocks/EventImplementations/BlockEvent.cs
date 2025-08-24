@@ -6,8 +6,7 @@ namespace Blocks.EventImplementations
     public enum BlockEventType{
         BlockCreated = 0,
         BlockClicked = 1,
-        BlockDestroyed = 2,
-        BlockPopped = 3,
+        BlockPopped = 2,
     }
     
     public class BlockEvent : Event<BlockEvent>
@@ -29,6 +28,14 @@ namespace Blocks.EventImplementations
             evt.BlockView = blockView;
             
             return evt;
+        }
+        
+        public override void Dispose()
+        {
+            base.Dispose();
+
+            Block = null;
+            BlockView = null;
         }
     }
 }

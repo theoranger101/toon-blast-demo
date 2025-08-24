@@ -30,6 +30,9 @@ namespace Grid
             m_Settings = GlobalSettings.Get();
             
             GEM.Subscribe<GridEvent>(HandleGetAxis, channel:(int)GridEventType.RequestAxis);
+            GEM.Subscribe<GridEvent>(HandleGetAdjacent, channel:(int)GridEventType.RequestAdjacent);
+            GEM.Subscribe<GridEvent>(HandleGetSameType, channel:(int)GridEventType.RequestSameType);
+            
             GEM.Subscribe<GridEvent>(HandleBlockAdded, channel:(int)GridEventType.AddBlock);
             GEM.Subscribe<GridEvent>(HandleClearPosition, channel:(int)GridEventType.ClearPosition);
             GEM.Subscribe<GridEvent>(HandleBlockMoved, channel:(int)GridEventType.BlockMoved);
@@ -41,6 +44,9 @@ namespace Grid
         private void OnDestroy()
         {
             GEM.Unsubscribe<GridEvent>(HandleGetAxis, channel:(int)GridEventType.RequestAxis);
+            GEM.Unsubscribe<GridEvent>(HandleGetAdjacent, channel:(int)GridEventType.RequestAdjacent);
+            GEM.Unsubscribe<GridEvent>(HandleGetSameType, channel:(int)GridEventType.RequestSameType);
+            
             GEM.Unsubscribe<GridEvent>(HandleBlockAdded, channel:(int)GridEventType.AddBlock);
             GEM.Unsubscribe<GridEvent>(HandleClearPosition, channel:(int)GridEventType.ClearPosition);
             GEM.Unsubscribe<GridEvent>(HandleBlockMoved, channel:(int)GridEventType.BlockMoved);
@@ -79,6 +85,18 @@ namespace Grid
         private void HandleGetAxis(GridEvent evt)
         {
             var result = GetAxis(evt.Axis, evt.GridPosition);
+            evt.Blocks = result;
+        }
+
+        private void HandleGetAdjacent(GridEvent evt)
+        {
+            var result = GetAdjacent(evt.GridPosition);
+            evt.Blocks = result;
+        }
+        
+        private void HandleGetSameType(GridEvent evt)
+        {
+            var result = GetSameType(evt.MatchBlockType);
             evt.Blocks = result;
         }
 
@@ -211,6 +229,56 @@ namespace Grid
             }
 
             return columnBlocks;
+        }
+
+        private List<Block> GetAdjacent(Vector2Int gridPosition)
+        {
+            var adjacentBlocks = ListPool<Block>.Get();
+            
+            var gridWidth = m_Grid.GetLength(0);
+            var gridHeight = m_Grid.GetLength(1);
+            
+            for (var x = gridPosition.x - 1; x < gridPosition.x + 2; x++)
+            {
+                for (var y = gridPosition.y - 1; y < gridPosition.y + 2; y++)
+                {
+                    if (x < 0 || x >= gridWidth || y < 0 || y >= gridHeight)
+                    {
+                        continue;
+                    }
+                    
+                    adjacentBlocks.Add(m_Grid[x, y]);
+                }
+            }
+            
+            return adjacentBlocks;
+        }
+
+        private List<Block> GetSameType(MatchBlockType type)
+        {
+            // TODO: can be further implemented
+            return GetMatchBlocksOfType(type);
+        }
+
+        private List<Block> GetMatchBlocksOfType(MatchBlockType type)
+        {
+            var blocks = ListPool<Block>.Get();
+            
+            var gridWidth = m_Grid.GetLength(0);
+            var gridHeight = m_Grid.GetLength(1);
+
+            for (var x = 0; x < gridWidth; x++)
+            {
+                for (var y = 0; y < gridHeight; y++)
+                {
+                    if (m_Grid[x, y] is MatchBlock mb && mb.Type == type)
+                    {
+                        blocks.Add(m_Grid[x, y]);
+                    }
+                }
+            }
+            
+            return blocks;
         }
         
         public List<Block> FindConnectedBlocks(Block startBlock)

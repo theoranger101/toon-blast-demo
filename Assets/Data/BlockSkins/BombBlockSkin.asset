@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f258d54cb1f24e1f8a46885d6f22ae4f, type: 3}
+  m_Name: BombBlockSkin
+  m_EditorClassIdentifier: 
+  Category: 1
+  MatchBlockType: 3
+  PowerUpType: 1
+  ObstacleType: 0
+  OverridePrefab: {fileID: 4109155824617843490, guid: 4b25a62d75771426f84f37d9806996f8, type: 3}
+  Icon: {fileID: 0}
+  IconPivot: {x: 0.5, y: 0.5}
+  PopVfxPrefab: {fileID: 0}

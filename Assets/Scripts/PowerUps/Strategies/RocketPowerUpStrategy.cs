@@ -3,13 +3,14 @@ using Grid;
 using Grid.EventImplementations;
 using UnityEngine;
 using Utilities.Events;
+using Utilities.Pooling;
 
 namespace PowerUps.Strategies
 {
     public class RocketPowerUpStrategy : IPowerUpStrategy
     {
         public PowerUpBlock Owner { get; set; }
-        public GridAxis Orientation { get; set; }
+        public GridAxis Orientation { get; private set; }
 
         public RocketPowerUpStrategy()
         {
@@ -26,6 +27,7 @@ namespace PowerUps.Strategies
 
             var blocksToPop = evt.Blocks;
             
+            // TODO: if this is all repeated find a way to generalize it.
             for (var i = blocksToPop.Count - 1; i >= 0; i--)
             {
                 if (blocksToPop[i] == Owner)
@@ -51,6 +53,8 @@ namespace PowerUps.Strategies
             }
             
             evt.Dispose();
+            ListPool<Block>.Release(blocksToPop);
+            
             Owner = null;
             
             // TODO: pooling for strategies

@@ -13,6 +13,8 @@ namespace Grid.EventImplementations
         RequestAxis = 3,
         AddBlock = 4,
         ClearPosition = 5,
+        RequestAdjacent = 6,
+        RequestSameType = 7,
     }
     
     public class GridEvent : Event<GridEvent>
@@ -21,6 +23,7 @@ namespace Grid.EventImplementations
         public Vector2Int GridPosition;
         public GridAxis Axis;
         public List<Block> Blocks;
+        public MatchBlockType MatchBlockType;
 
         public static GridEvent Get(Block block)
         {
@@ -60,6 +63,14 @@ namespace Grid.EventImplementations
         {
             var evt = GetPooledInternal();
             evt.Blocks = blocks;
+
+            return evt;
+        }
+
+        public static GridEvent Get(MatchBlockType type)
+        {
+            var evt = GetPooledInternal();
+            evt.MatchBlockType = type;
 
             return evt;
         }

@@ -27,13 +27,6 @@ namespace Blocks
             {
                 createBlockEvt.SendGlobal(channel: (int)BlockEventType.BlockCreated);
             }
-            
-            /*
-            // TODO: dummy implementation for testing purposes
-            // TODO: Consider using a pooling system instead of instantiating the view
-            var blockView = Object.Instantiate(GlobalSettings.Get().MatchBlockPrefab).GetComponent<BlockView>();
-            blockView.Init(block);
-            */
 
             return block;
         }
