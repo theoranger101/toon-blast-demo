@@ -11,12 +11,12 @@ namespace Blocks
         public override bool CanBePopped => true;
 
         public IPowerUpStrategy Strategy { get; private set; }
-
+        
         public override void Init(BlockSpawnData spawnData)
         {
             Type = spawnData.PowerUpType ?? throw new Exception("PowerUpType is required for PowerUpBlock");
             GridPosition = spawnData.GridPosition;
-
+            
             Strategy = PowerUpStrategyFactory.GetStrategy(Type);
             Strategy.Owner = this;
         }

@@ -69,13 +69,6 @@ namespace Blocks
                     s_ObstacleBlockPool.Release(obstacleBlock);
                     break;
             }
-            
-            /*
-            using (var removeBlockEvt = BlockEvent.Get(block))
-            {
-                removeBlockEvt.SendGlobal(channel: (int)BlockEventType.BlockCreated);
-            }
-            */
         }
     }
 }

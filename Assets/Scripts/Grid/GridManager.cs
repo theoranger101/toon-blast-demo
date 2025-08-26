@@ -294,6 +294,40 @@ namespace Grid
 
             return strategy.FindConnectedMatches(startBlock, m_Grid);
         }
+
+        public PowerUpBlock SpawnPowerUp(in PowerUpPlan powerUpPlan)
+        {
+            if (powerUpPlan.PowerUpToCreate == PowerUpToCreate.None)
+            {
+                return null;
+            }
+            
+            var data = new BlockSpawnData() { Category = BlockCategory.PowerUp, GridPosition = powerUpPlan.GridPos };
+            
+            Block spawnedBlock = null;    
+            switch (powerUpPlan.PowerUpToCreate)
+            {
+                case PowerUpToCreate.Rocket:
+                    data.PowerUpType = PowerUpType.Rocket;
+                    spawnedBlock = BlockFactory.CreateRocket(data, powerUpPlan.Orientation);
+                    break;
+                case PowerUpToCreate.Bomb:
+                    data.PowerUpType = PowerUpType.Bomb;
+                    spawnedBlock = BlockFactory.CreateBomb(data);
+                    break;
+                case PowerUpToCreate.DiscoBall:
+                    data.PowerUpType = PowerUpType.DiscoBall;
+                    spawnedBlock = BlockFactory.CreateDiscoBall(data, powerUpPlan.TargetType);
+                    break;
+            }
+
+            using (var addEvt = GridEvent.Get(spawnedBlock, spawnedBlock.GridPosition))
+            {
+                addEvt.SendGlobal((int)GridEventType.AddBlock);
+            }
+            
+            return (PowerUpBlock)spawnedBlock;
+        }
         
         #region Editor Utilities
 

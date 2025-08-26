@@ -12,11 +12,6 @@ namespace PowerUps.Strategies
         
         public MatchBlockType TargetType { get; set; }
         
-        public DiscoBallPowerUpStrategy()
-        {
-            // TargetType = targetType;
-        }
-        
         public void Activate()
         {
             Debug.Log("Disco Ball PowerUp activated at position: " + Owner.GridPosition);
