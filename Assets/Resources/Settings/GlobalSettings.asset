@@ -14,9 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   GridWidth: 8
   GridHeight: 9
-  MatchCountForRocket: 5
-  MatchCountForBomb: 7
-  MatchCountForDiscoBall: 10
+  MatchCountForRocket: 2
+  MatchCountForBomb: 3
+  MatchCountForDiscoBall: 4
   MatchBlockPrefab: {fileID: 8327362633279532477, guid: 19c5fb9eba22b194a853ad38dcd9e1ce, type: 3}
   BlockCellSize: 100
   BlockCellSpacing: 10
+  BlockMovementDuration: 0.2

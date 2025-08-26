@@ -12,9 +12,9 @@ namespace PowerUps.Strategies
         
         public MatchBlockType TargetType { get; set; }
         
-        public DiscoBallPowerUpStrategy(MatchBlockType targetType = MatchBlockType.Yellow)
+        public DiscoBallPowerUpStrategy()
         {
-            TargetType = targetType;
+            // TargetType = targetType;
         }
         
         public void Activate()

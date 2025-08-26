@@ -10,11 +10,11 @@ namespace PowerUps.Strategies
     public class RocketPowerUpStrategy : IPowerUpStrategy
     {
         public PowerUpBlock Owner { get; set; }
-        public GridAxis Orientation { get; private set; }
+        public GridAxis Orientation { get; set; }
 
         public RocketPowerUpStrategy()
         {
-            Orientation = Random.Range(0, 2) == 0 ? GridAxis.Row : GridAxis.Column;
+            // Orientation = Random.Range(0, 2) == 0 ? GridAxis.Row : GridAxis.Column;
         }
 
         public void Activate()

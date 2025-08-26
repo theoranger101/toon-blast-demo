@@ -25,7 +25,6 @@ namespace Blocks.UI
             if (Image != null)
             {
                 Image.sprite = m_BlockSkin.Icon;
-                Image.SetNativeSize();
             }
             
             SubscribeEvents();

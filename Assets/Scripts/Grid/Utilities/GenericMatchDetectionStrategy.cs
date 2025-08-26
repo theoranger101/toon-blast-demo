@@ -35,8 +35,8 @@ namespace Grid.Utilities
                 Debug.Log("Visiting block at position: " + block.GridPosition + " of type: " + match.Type + "");
 
                 // Check adjacent blocks (up, down, left, right)
-                int x = block.GridPosition.x;
-                int y = block.GridPosition.y;
+                var x = block.GridPosition.x;
+                var y = block.GridPosition.y;
 
                 if (x > 0) DepthFirstSearch(grid[x - 1, y]); // Left
                 if (x < grid.GetLength(0) - 1) DepthFirstSearch(grid[x + 1, y]); // Right

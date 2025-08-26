@@ -25,6 +25,10 @@ namespace Grid
         // TODO: consider a different approach for global settings
         private GlobalSettings m_Settings;
         
+        private static readonly MatchBlockClickStrategy s_MatchClick = new();
+        private static readonly PowerUpBlockClickStrategy s_PowerClick = new();
+        private static readonly ObstacleBlockClickStrategy s_ObstacleClick = new();
+        
         private void Awake()
         {
             m_Settings = GlobalSettings.Get();
@@ -132,9 +136,9 @@ namespace Grid
         {
             IBlockClickStrategy strategy = block switch
             {
-                MatchBlock => new MatchBlockClickStrategy(),
-                PowerUpBlock => new PowerUpBlockClickStrategy(),
-                ObstacleBlock => new ObstacleBlockClickStrategy(),
+                MatchBlock => s_MatchClick,
+                PowerUpBlock => s_PowerClick,
+                ObstacleBlock => s_ObstacleClick,
                 _ => throw new NotSupportedException(
                     $"Block type {block.GetType().Name} is not supported for clicking.")
             };
@@ -173,7 +177,6 @@ namespace Grid
 
             m_Grid[gridPosition.x, gridPosition.y] = block;
             block.GridPosition = gridPosition;
-            // block.OnPopped += HandleBlockPopped;
         }
         
         private void RemoveBlock(Vector2Int gridPosition)

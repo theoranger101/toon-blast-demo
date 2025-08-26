@@ -1,5 +1,7 @@
 using System;
 using Blocks.EventImplementations;
+using Grid;
+using PowerUps.Strategies;
 using Utilities.Events;
 using Utilities.Pooling;
 
@@ -31,6 +33,28 @@ namespace Blocks
             return block;
         }
 
+        public static Block CreateRocket(BlockSpawnData spawnData, GridAxis orientation)
+        {
+            var block = (PowerUpBlock) CreateBlock(spawnData);
+            ((RocketPowerUpStrategy)block.Strategy).Orientation = orientation;
+            
+            return block;
+        }
+        
+        public static Block CreateBomb(BlockSpawnData spawnData)
+        {
+            var block = (PowerUpBlock) CreateBlock(spawnData);
+            return block;
+        }
+        
+        public static Block CreateDiscoBall(BlockSpawnData spawnData, MatchBlockType targetType)
+        {
+            var block = (PowerUpBlock) CreateBlock(spawnData);
+            ((DiscoBallPowerUpStrategy)block.Strategy).TargetType = targetType;
+            
+            return block;
+        }
+        
         public static void ReleaseBlock(Block block)
         {
             switch (block)
