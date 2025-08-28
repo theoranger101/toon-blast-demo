@@ -40,5 +40,8 @@ namespace Data
         public float BlockCellSpacing = 10f;
         
         public float BlockMovementDuration = 0.2f;
+
+        [Header("Debug Functionalities")] 
+        public bool ShowGridPositions = true;
     }
 }

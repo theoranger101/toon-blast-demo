@@ -1,4 +1,5 @@
 using Blocks;
+using Blocks.BlockTypes;
 using Grid.EventImplementations;
 using UnityEngine;
 using Utilities.Events;
@@ -14,11 +15,19 @@ namespace PowerUps.Strategies
         
         public void Activate()
         {
-            Debug.Log("Disco Ball PowerUp activated at position: " + Owner.GridPosition);
+            if (Owner == null)
+            {
+                return;
+            }
+            
+            Debug.Log($"Disco Ball PowerUp targeting {TargetType} blocks activated at position: {Owner.GridPosition}");
 
             var evt = GridEvent.Get(TargetType);
             evt.SendGlobal(channel: (int)GridEventType.RequestSameType);
 
+            Owner.PopTargetsThenOwner(evt.Blocks, popOwner: false);
+            
+            /*
             var blocksToPop = evt.Blocks;
             
             // TODO: if this is all repeated find a way to generalize it.
@@ -45,11 +54,13 @@ namespace PowerUps.Strategies
             {
                 refillEvent.SendGlobal(channel: (int)GridEventType.TriggerRefill);
             }
+            */
             
             evt.Dispose();
-            ListPool<Block>.Release(blocksToPop);
-            
             Owner = null;
+            
+            // ListPool<Block>.Release(blocksToPop);
+            
             
             // TODO: pooling for strategies
         }

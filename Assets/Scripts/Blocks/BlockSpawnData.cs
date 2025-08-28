@@ -2,6 +2,7 @@ using UnityEngine;
 
 namespace Blocks
 {
+    [System.Serializable]
     public struct BlockSpawnData
     {
         public BlockCategory Category;

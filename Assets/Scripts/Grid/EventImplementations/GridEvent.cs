@@ -25,6 +25,8 @@ namespace Grid.EventImplementations
         public List<Block> Blocks;
         public MatchBlockType MatchBlockType;
 
+        public HashSet<Vector2Int> GridPositions;
+
         public static GridEvent Get(Block block)
         {
             var evt = GetPooledInternal();
@@ -67,6 +69,14 @@ namespace Grid.EventImplementations
             return evt;
         }
 
+        public static GridEvent Get(HashSet<Vector2Int> gridPositions)
+        {
+            var evt = GetPooledInternal();
+            evt.GridPositions = gridPositions;
+            
+            return evt;
+        }
+
         public static GridEvent Get(MatchBlockType type)
         {
             var evt = GetPooledInternal();
@@ -83,6 +93,7 @@ namespace Grid.EventImplementations
             GridPosition = Vector2Int.zero;
             Axis = default;
             Blocks = null;
+            GridPositions = null;
         }
     }
 }

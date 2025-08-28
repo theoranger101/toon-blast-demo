@@ -1,9 +1,8 @@
-using Blocks;
+using Blocks.BlockTypes;
 using Grid;
 using Grid.EventImplementations;
 using UnityEngine;
 using Utilities.Events;
-using Utilities.Pooling;
 
 namespace PowerUps.Strategies
 {
@@ -12,50 +11,64 @@ namespace PowerUps.Strategies
         public PowerUpBlock Owner { get; set; }
         public GridAxis Orientation { get; set; }
 
-        public RocketPowerUpStrategy()
-        {
-            // Orientation = Random.Range(0, 2) == 0 ? GridAxis.Row : GridAxis.Column;
-        }
-
         public void Activate()
         {
-            Debug.Log("Rocket PowerUp activated at position: " + Owner.GridPosition);
+            if (Owner == null)
+            {
+                return;
+            }
+            
+            Debug.Log($"Rocket PowerUp with Orientation {Orientation} activated at position {Owner.GridPosition}");
 
             var gridPosition = Owner.GridPosition;
             var evt = GridEvent.Get(Orientation, gridPosition);
             evt.SendGlobal(channel: (int)GridEventType.RequestAxis);
 
-            var blocksToPop = evt.Blocks;
+            Owner.PopTargetsThenOwner(evt.Blocks, popOwner: false);
             
+            /*
+            var blocksToPop = evt.Blocks;
+            var cellsToEmpty = HashSetPool<Vector2Int>.Get();
+
+
+
             // TODO: if this is all repeated find a way to generalize it.
             for (var i = blocksToPop.Count - 1; i >= 0; i--)
             {
-                if (blocksToPop[i] == Owner)
+                var block = blocksToPop[i];
+
+                if (block == null)
                 {
                     continue;
                 }
 
-                if (blocksToPop[i] == null)
+                if (block == Owner)
                 {
-                    blocksToPop.RemoveAt(i);
                     continue;
                 }
-                
-                blocksToPop[i].Pop();
+
+                block.Pop();
+                cellsToEmpty.Add(block.GridPosition);
             }
-            
-            blocksToPop.Add(Owner);
-            
+
+            cellsToEmpty.Add(Owner.GridPosition);
+
             // TODO: Consider doing extensions for these events
-            using (var refillEvent = GridEvent.Get(blocksToPop))
+            using (var refillEvent = GridEvent.Get(cellsToEmpty))
             {
                 refillEvent.SendGlobal(channel: (int)GridEventType.TriggerRefill);
             }
+
+            */
             
             evt.Dispose();
-            ListPool<Block>.Release(blocksToPop);
-            
             Owner = null;
+
+            /*
+            ListPool<Block>.Release(blocksToPop);
+            HashSetPool<Vector2Int>.Release(cellsToEmpty);
+            */
+            
             
             // TODO: pooling for strategies
         }

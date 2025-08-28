@@ -1,9 +1,10 @@
-using System.Collections.Generic;
+using Blocks;
+using Blocks.BlockTypes;
 using Data;
 using Grid;
 using UnityEngine;
 
-namespace Blocks
+namespace PowerUps
 {
     public enum PowerUpToCreate
     {

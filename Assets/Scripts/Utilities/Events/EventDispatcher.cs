@@ -4,7 +4,7 @@ namespace Utilities.Events
 {
     public static class EventDispatcher
     {
-        public static readonly object GlobalContext = new object();
+        public static readonly object GlobalContext = new();
         public static object CurrentContext = GlobalContext;
         
         public const int DefaultChannel = -1;

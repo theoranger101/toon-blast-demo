@@ -21,28 +21,30 @@ namespace Grid
         
         private void HandleRefillRequest(GridEvent evt)
         {
-            if (evt.Blocks == null || evt.Blocks.Count == 0)
+            if (evt.GridPositions == null || evt.GridPositions.Count == 0)
             {
                 Debug.LogWarning("No blocks to refill.");
                 return;
             }
-            
-            RefillEmptiedBlocks(evt.Blocks);
+
+            RefillEmptiedCells(evt.GridPositions);
         }
 
-        public void RefillEmptiedBlocks(List<Block> emptiedBlocks)
+        private void RefillEmptiedCells(HashSet<Vector2Int> emptiedCells)
         {
             var columnsToRefill = HashSetPool<int>.Get();
-            
-            for (var i = 0; i < emptiedBlocks.Count; i++)
+
+            foreach (var emptiedCell in emptiedCells)
             {
-                columnsToRefill.Add(emptiedBlocks[i].GridPosition.x);
+                columnsToRefill.Add(emptiedCell.x);
             }
             
             foreach (var column in columnsToRefill)
             {
                 RefillColumn(column);
             }
+            
+            HashSetPool<int>.Release(columnsToRefill);
         }
 
         private void RefillColumn(int columnIndex)
@@ -71,9 +73,9 @@ namespace Grid
 
                 if (scanY != targetY)
                 {
-                    using (var removeEvent = GridEvent.Get(block.GridPosition))
+                    using (var clearEvt = GridEvent.Get(block.GridPosition))
                     {
-                        removeEvent.SendGlobal(channel: (int)GridEventType.ClearPosition);
+                        clearEvt.SendGlobal(channel: (int)GridEventType.ClearPosition);
                     }
                     
                     using (var moveEvent = GridEvent.Get(block, new Vector2Int(columnIndex, targetY)))

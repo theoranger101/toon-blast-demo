@@ -1,4 +1,5 @@
 using System;
+using Blocks.BlockTypes;
 using Blocks.EventImplementations;
 using Grid;
 using PowerUps.Strategies;
@@ -13,7 +14,7 @@ namespace Blocks
         private static GenericPool<PowerUpBlock> s_PowerUpBlockPool = new();
         private static GenericPool<ObstacleBlock> s_ObstacleBlockPool = new();
         
-        public static Block CreateBlock(BlockSpawnData spawnData)
+        public static Block CreateBlock(in BlockSpawnData spawnData)
         {
             Block block = spawnData.Category switch
             {
@@ -33,7 +34,7 @@ namespace Blocks
             return block;
         }
 
-        public static Block CreateRocket(BlockSpawnData spawnData, GridAxis orientation)
+        public static Block CreateRocket(in BlockSpawnData spawnData, GridAxis orientation)
         {
             var block = (PowerUpBlock) CreateBlock(spawnData);
             ((RocketPowerUpStrategy)block.Strategy).Orientation = orientation;
@@ -41,13 +42,13 @@ namespace Blocks
             return block;
         }
         
-        public static Block CreateBomb(BlockSpawnData spawnData)
+        public static Block CreateBomb(in BlockSpawnData spawnData)
         {
             var block = (PowerUpBlock) CreateBlock(spawnData);
             return block;
         }
         
-        public static Block CreateDiscoBall(BlockSpawnData spawnData, MatchBlockType targetType)
+        public static Block CreateDiscoBall(in BlockSpawnData spawnData, MatchBlockType targetType)
         {
             var block = (PowerUpBlock) CreateBlock(spawnData);
             ((DiscoBallPowerUpStrategy)block.Strategy).TargetType = targetType;
@@ -57,6 +58,8 @@ namespace Blocks
         
         public static void ReleaseBlock(Block block)
         {
+            block.Release();
+            
             switch (block)
             {
                 case MatchBlock matchBlock:

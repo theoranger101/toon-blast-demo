@@ -36,11 +36,12 @@ namespace Blocks
     {
         public Vector2Int GridPosition;
         
-        public abstract bool IsAffectedByGravity { get; }
+        public abstract bool IsAffectedByGravity { get; protected set; }
         public abstract bool CanBePopped { get; }
+
         public bool IsPopped { get; protected set; }
-        public abstract void Init(BlockSpawnData spawnData);
-        public abstract void OnAffectedByPowerUp();
+        
+        public abstract void Init(in BlockSpawnData spawnData);
         
         public virtual void Pop()
         {
@@ -48,15 +49,22 @@ namespace Blocks
             {
                 Debug.LogWarning("Trying to pop a block that has already been popped. Block at position " +
                                  GridPosition + " is already popped.");
+                return;
             }
-            
+
             Debug.Log("Popped Block at position " + GridPosition + ".");
+            IsPopped = true;
+            
             using (var poppedEvt = BlockEvent.Get(this))
             {
                 poppedEvt.SendGlobal((int)BlockEventType.BlockPopped);
             }
-            
-            IsPopped = true;
+        }
+
+        public virtual void Release()
+        {
+            IsPopped = false;
+            GridPosition = default;
         }
     }
 }

@@ -20,4 +20,5 @@ MonoBehaviour:
   MatchBlockPrefab: {fileID: 8327362633279532477, guid: 19c5fb9eba22b194a853ad38dcd9e1ce, type: 3}
   BlockCellSize: 100
   BlockCellSpacing: 10
-  BlockMovementDuration: 0.2
+  BlockMovementDuration: 0.1
+  ShowGridPositions: 1

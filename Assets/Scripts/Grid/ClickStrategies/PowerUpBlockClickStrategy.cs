@@ -7,7 +7,10 @@ namespace Grid.ClickStrategies
     {
         public IEnumerator ResolveClick(GridManager grid, Block block)
         {
-            block.Pop();
+            using (grid.ResolutionBatch)
+            {
+                block.Pop();
+            }
             
             yield break;
         }

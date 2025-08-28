@@ -1,6 +1,8 @@
 using System.Collections;
 using Blocks;
+using Blocks.BlockTypes;
 using Data;
+using PowerUps;
 using UnityEngine;
 using Utilities.Pooling;
 
@@ -10,29 +12,48 @@ namespace Grid.ClickStrategies
     {
         public IEnumerator ResolveClick(GridManager grid, Block block)
         {
-            var connected = grid.FindConnectedBlocks(block);
+            if (block is not MatchBlock pressed)
+            {
+                yield break;
+            }
+            
+            var connected = grid.FindConnectedBlocks(pressed);
             
             if (connected.Count <= 1)
             {
                 Debug.Log("No connected blocks found to pop at the specified position. Returning");
+                ListPool<Block>.Release(connected);
+                
                 yield break;
             }
-            
-            block.Pop();
 
-            var powerUpPlan = PowerUpRules.Plan(connected.Count, (MatchBlock)block, GlobalSettings.Get());
-            if (powerUpPlan.PowerUpToCreate != PowerUpToCreate.None)
+            using (grid.ResolutionBatch)
             {
-                grid.SpawnPowerUp(powerUpPlan);
-                connected.Remove(block);
+                var settings = GlobalSettings.Get();
+                var powerUpPlan = PowerUpRules.Plan(connected.Count, pressed, settings);
+                
+                if (powerUpPlan.PowerUpToCreate != PowerUpToCreate.None)
+                {
+                    pressed.Pop();
+                    grid.SpawnPowerUp(in powerUpPlan);
+                
+                    for (var i = 0; i < connected.Count; i++)
+                    {
+                        var b = connected[i];
+                        if (!ReferenceEquals(b, pressed))
+                        {
+                            b.Pop();
+                        }
+                    }
+                }
+                else
+                {
+                    for (var i = 0; i < connected.Count; i++)
+                    {
+                        connected[i].Pop();
+                    }
+                }
             }
-            
-            foreach (var connectedBlock in connected)
-            {
-                connectedBlock.Pop();
-            }
-            
-            grid.TriggerRefill(connected);
             
             ListPool<Block>.Release(connected);
         }

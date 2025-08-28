@@ -43,7 +43,8 @@ namespace Grid.Editor
                     new BlockSpawnData()
                     {
                         // Category = BlockCategory.PowerUp, PowerUpType = PowerUpType.DiscoBall,
-                        Category = BlockCategory.Match, MatchBlockType = MatchBlockType.Yellow,
+                        // Category = BlockCategory.Match, MatchBlockType = MatchBlockType.Yellow,
+                        Category = BlockCategory.Obstacle, ObstacleType = ObstacleType.WoodenBox,
                         GridPosition = new Vector2Int(1, 1)
                     },
                     new BlockSpawnData()

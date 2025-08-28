@@ -1,5 +1,9 @@
+using System.Collections;
 using Blocks.EventImplementations;
 using Blocks.UI.Skins;
+using Data;
+using DG.Tweening;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using Utilities.Events;
@@ -11,13 +15,15 @@ namespace Blocks.UI
         public RectTransform RectTransform;
         public Image Image;
         public Button Button;
+
+        public TextMeshProUGUI GridPosText;
         
         public Block Block { get; private set; }
         private BlockSkin m_BlockSkin;
         
         public virtual void Init(Block block, BlockSkin skin)
         {
-            Debug.Log("Initializing BlockView with block: " + block.GetType());
+            Debug.Log("Initializing BlockView with block: " + block.GetType() + " at position " + block.GridPosition);
             
             Block = block;
             m_BlockSkin = skin;
@@ -26,8 +32,20 @@ namespace Blocks.UI
             {
                 Image.sprite = m_BlockSkin.Icon;
             }
+
+            if (GlobalSettings.Get().ShowGridPositions)
+            {
+                GridPosText.text = block.GridPosition.ToString();    
+                GridPosText.enabled = true;
+            }
+            else
+            {
+                GridPosText.enabled = false;
+            }
             
             SubscribeEvents();
+
+            Button.enabled = true;
         }
 
         protected virtual void SubscribeEvents()
@@ -55,7 +73,7 @@ namespace Blocks.UI
             OnPopped();
         }
         
-        public void OnPopped()
+        private void OnPopped()
         {
             PlayPopSequence();
             OnRelease();
@@ -71,6 +89,10 @@ namespace Blocks.UI
         
         private void OnClick()
         {
+            StartCoroutine(ToggleInputCoroutine());
+            
+            PerformClickAnimation();
+            
             if (Block != null)
             {
                 using (var clickedEvt = BlockEvent.Get(Block))
@@ -80,23 +102,35 @@ namespace Blocks.UI
             }
             else
             {
-                Debug.LogWarning("Block is not assigned to BlockView.");
+                Debug.LogWarning("Block is not assigned to BlockView.", gameObject);
             }
         }
 
         private void OnRelease()
         {
-            /*
-            using (var releaseEvt = BlockEvent.Get(this))
-            {
-                releaseEvt.SendGlobal((int)BlockEventType.BlockDestroyed);
-            }
-            */
+            Button.enabled = false;
             
             UnsubscribeEvents();
+            StopAllCoroutines();
             
             Block = null;
             m_BlockSkin = null;
+        }
+
+        private void PerformClickAnimation()
+        {
+            // TODO: constant values and new Vector creation!
+            RectTransform.DOPunchScale(new Vector2(0.9f, 0.9f), 0.15f, vibrato: 1);
+        }
+
+        // TODO: not final design
+        private IEnumerator ToggleInputCoroutine()
+        {
+            Button.enabled = false;
+            
+            yield return new WaitForSeconds(0.15f);
+            
+            Button.enabled = true;
         }
     }
 }

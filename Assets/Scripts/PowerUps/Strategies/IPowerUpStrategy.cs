@@ -1,4 +1,4 @@
-using Blocks;
+using Blocks.BlockTypes;
 
 namespace PowerUps.Strategies
 {
