@@ -6,6 +6,7 @@ using Blocks.EventImplementations;
 using Data;
 using Grid.ClickStrategies;
 using Grid.EventImplementations;
+using Grid.UI;
 using Grid.Utilities;
 using PowerUps;
 using UnityEngine;
@@ -71,10 +72,10 @@ namespace Grid
             GEM.Subscribe<GridEvent>(HandleGetAdjacent, channel: (int)GridEventType.RequestAdjacent);
             GEM.Subscribe<GridEvent>(HandleGetSameType, channel: (int)GridEventType.RequestSameType);
 
-            GEM.Subscribe<GridEvent>(HandleBlockAdded, channel: (int)GridEventType.AddBlock);
             GEM.Subscribe<GridEvent>(HandleClearPosition, channel: (int)GridEventType.ClearPosition);
             GEM.Subscribe<GridEvent>(HandleBlockMoved, channel: (int)GridEventType.BlockMoved);
 
+            GEM.Subscribe<BlockEvent>(HandleBlockAdded, channel:(int) BlockEventType.BlockCreated);
             GEM.Subscribe<BlockEvent>(HandleBlockPopped, channel: (int)BlockEventType.BlockPopped);
             GEM.Subscribe<BlockEvent>(HandleBlockClicked, channel: (int)BlockEventType.BlockClicked);
         }
@@ -85,10 +86,10 @@ namespace Grid
             GEM.Unsubscribe<GridEvent>(HandleGetAdjacent, channel: (int)GridEventType.RequestAdjacent);
             GEM.Unsubscribe<GridEvent>(HandleGetSameType, channel: (int)GridEventType.RequestSameType);
 
-            GEM.Unsubscribe<GridEvent>(HandleBlockAdded, channel: (int)GridEventType.AddBlock);
             GEM.Unsubscribe<GridEvent>(HandleClearPosition, channel: (int)GridEventType.ClearPosition);
             GEM.Unsubscribe<GridEvent>(HandleBlockMoved, channel: (int)GridEventType.BlockMoved);
 
+            GEM.Unsubscribe<BlockEvent>(HandleBlockAdded, channel:(int) BlockEventType.BlockCreated);
             GEM.Unsubscribe<BlockEvent>(HandleBlockPopped, channel: (int)BlockEventType.BlockPopped);
             GEM.Unsubscribe<BlockEvent>(HandleBlockClicked, channel: (int)BlockEventType.BlockClicked);
         }
@@ -120,9 +121,10 @@ namespace Grid
             SetGridPosition(evt.GridPosition, null);
         }
 
-        private void HandleBlockAdded(GridEvent evt)
+        private void HandleBlockAdded(BlockEvent evt)
         {
-            AddBlock(evt.Block, evt.GridPosition);
+            var block = evt.Block;
+            AddBlock(block, block.GridPosition);
         }
 
         private void HandleGetAxis(GridEvent evt)
@@ -377,12 +379,9 @@ namespace Grid
                 Debug.LogError("Failed to spawn PowerUpBlock at position " + powerUpPlan.GridPos);
                 return null;
             }
-
-            using (var addEvt = GridEvent.Get(spawnedBlock, spawnedBlock.GridPosition))
-            {
-                addEvt.SendGlobal((int)GridEventType.AddBlock);
-            }
-
+            
+            using(var powerUpEvt = GridEvent.Get())
+            
             return (PowerUpBlock)spawnedBlock;
         }
 

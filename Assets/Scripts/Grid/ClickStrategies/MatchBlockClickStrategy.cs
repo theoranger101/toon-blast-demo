@@ -2,8 +2,11 @@ using System.Collections;
 using Blocks;
 using Blocks.BlockTypes;
 using Data;
+using DG.Tweening;
 using PowerUps;
+using PowerUps.EventImplementations;
 using UnityEngine;
+using Utilities.Events;
 using Utilities.Pooling;
 
 namespace Grid.ClickStrategies
@@ -16,14 +19,14 @@ namespace Grid.ClickStrategies
             {
                 yield break;
             }
-            
+
             var connected = grid.FindConnectedBlocks(pressed);
-            
+
             if (connected.Count <= 1)
             {
                 Debug.Log("No connected blocks found to pop at the specified position. Returning");
                 ListPool<Block>.Release(connected);
-                
+
                 yield break;
             }
 
@@ -31,12 +34,17 @@ namespace Grid.ClickStrategies
             {
                 var settings = GlobalSettings.Get();
                 var powerUpPlan = PowerUpRules.Plan(connected.Count, pressed, settings);
-                
+
                 if (powerUpPlan.PowerUpToCreate != PowerUpToCreate.None)
                 {
+                    var powerUpEvt = PowerUpEvent.Get(pressed, powerUpPlan.PowerUpToCreate, connected);
+                    powerUpEvt.SendGlobal((int)PowerUpEventType.PowerUpCreated);
+
+                    yield return powerUpEvt.Tween.WaitForCompletion();
+                    
                     pressed.Pop();
                     grid.SpawnPowerUp(in powerUpPlan);
-                
+
                     for (var i = 0; i < connected.Count; i++)
                     {
                         var b = connected[i];
@@ -45,6 +53,8 @@ namespace Grid.ClickStrategies
                             b.Pop();
                         }
                     }
+                    
+                    powerUpEvt.Dispose();
                 }
                 else
                 {
@@ -54,7 +64,7 @@ namespace Grid.ClickStrategies
                     }
                 }
             }
-            
+
             ListPool<Block>.Release(connected);
         }
     }

@@ -91,8 +91,6 @@ namespace Blocks.UI
         {
             StartCoroutine(ToggleInputCoroutine());
             
-            PerformClickAnimation();
-            
             if (Block != null)
             {
                 using (var clickedEvt = BlockEvent.Get(Block))
@@ -115,6 +113,12 @@ namespace Blocks.UI
             
             Block = null;
             m_BlockSkin = null;
+
+            RectTransform.DOKill();
+            Image.DOKill();
+            
+            Image.DOFade(1f,0f);
+            RectTransform.localScale = Vector3.one;
         }
 
         private void PerformClickAnimation()

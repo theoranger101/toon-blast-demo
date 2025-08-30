@@ -104,10 +104,6 @@ namespace Grid
                 };
 
                 var newBlock = BlockFactory.CreateBlock(randomSpawnData);
-                using (var addBlockEvent = GridEvent.Get(newBlock, newBlock.GridPosition))
-                {
-                    addBlockEvent.SendGlobal(channel: (int)GridEventType.AddBlock);
-                }
             }
 
             requestEvt.Dispose();

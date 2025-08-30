@@ -148,6 +148,7 @@ GameObject:
   - component: {fileID: 8327362633279532479}
   - component: {fileID: 8327362633279532474}
   - component: {fileID: 8327362633279532473}
+  - component: {fileID: 6290545392273731495}
   m_Layer: 5
   m_Name: BlockViewPrefab
   m_TagString: Untagged
@@ -274,3 +275,17 @@ MonoBehaviour:
   Image: {fileID: 8327362633279532479}
   Button: {fileID: 8327362633279532474}
   GridPosText: {fileID: 7260429343335563383}
+--- !u!114 &6290545392273731495
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8327362633279532477}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3d569cdac2044944b506155be2752f73, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  RectTransform: {fileID: 8327362633279532478}
+  Image: {fileID: 8327362633279532479}

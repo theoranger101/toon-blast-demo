@@ -30,7 +30,7 @@ namespace Blocks.BlockTypes
                                  GridPosition + " is already popped.");
                 return;
             }
-            
+
             Debug.Log($"Activated PowerUpBlock {Type} at position {GridPosition}");
             
             Strategy.Activate();
