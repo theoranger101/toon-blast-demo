@@ -9,7 +9,6 @@ namespace Grid.EventImplementations
     {
         BlockMoved = 0,
         TriggerRefill = 1,
-        
         RequestGrid = 2,
         RequestAxis = 3,
         ClearPosition = 5,

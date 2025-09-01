@@ -1,4 +1,3 @@
-using System;
 using DG.Tweening;
 using UnityEngine;
 using UnityEngine.UI;
@@ -15,8 +14,15 @@ namespace Blocks.UI
 
         private void Awake()
         {
-            RectTransform ??= GetComponent<RectTransform>();
-            Image ??= GetComponent<Image>();
+            if (RectTransform == null)
+            {
+                RectTransform = GetComponent<RectTransform>();
+            }
+
+            if (Image == null)
+            {
+                Image = GetComponent<Image>();
+            }
         }
 
         public void KillAll()
@@ -25,14 +31,15 @@ namespace Blocks.UI
             {
                 m_Seq.Kill();
             }
+
             m_Seq = null;
         }
 
         public Tween SpawnIn(float dist, float dur, Ease ease)
         {
             KillAll();
-            
-            var start = RectTransform.anchoredPosition + (Vector2.up *  dist);
+
+            var start = RectTransform.anchoredPosition + (Vector2.up * dist);
             RectTransform.anchoredPosition = start;
 
             m_Seq = DOTween.Sequence().SetRecyclable();
@@ -44,7 +51,7 @@ namespace Blocks.UI
         public Tween FallTo(Vector2 target, float dur, Ease ease)
         {
             KillAll();
-            
+
             m_Seq = DOTween.Sequence().SetRecyclable();
             m_Seq.Append(RectTransform.DOAnchorPos(target, dur, true).SetEase(ease));
 
@@ -54,26 +61,26 @@ namespace Blocks.UI
         public Tween Pop(float dur, Ease ease)
         {
             KillAll();
-            
+
             m_Seq = DOTween.Sequence().SetRecyclable();
             m_Seq.Append(RectTransform.DOScale(0, dur).SetEase(ease));
-            
+
             return m_Seq;
         }
 
         public Tween Bump(float offset, float dur, Ease ease = Ease.Linear)
         {
             KillAll();
-            
+
             var pos = RectTransform.anchoredPosition;
-            
+
             m_Seq = DOTween.Sequence().SetRecyclable();
             m_Seq.Append(RectTransform.DOAnchorPosY(pos.y + offset, dur).SetEase(ease));
             m_Seq.Append(RectTransform.DOAnchorPosX(pos.x, dur).SetEase(ease));
 
             return m_Seq;
         }
-        
+
         private void OnDisable()
         {
             KillAll();

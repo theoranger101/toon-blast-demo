@@ -16,6 +16,14 @@ namespace Utilities.Pooling
             return queue.Dequeue();
         }
 
+        public static List<T> Get(T[] array)
+        {
+            var list = Get();
+            list.AddRange(array);
+            
+            return list;
+        }
+
         public static void Release(List<T> list)
         {
             list.Clear();

@@ -8,6 +8,7 @@ using Grid.ClickStrategies;
 using Grid.EventImplementations;
 using Grid.UI;
 using Grid.Utilities;
+using LevelManagement.EventImplementations;
 using PowerUps;
 using UnityEngine;
 using Utilities.Events;
@@ -67,7 +68,18 @@ namespace Grid
         private void Awake()
         {
             m_Settings = GlobalSettings.Get();
+            SubscribeEvents();
+        }
 
+        private void OnDestroy()
+        {
+            UnsubscribeEvents();
+        }
+
+        private void SubscribeEvents()
+        {
+            GEM.Subscribe<LevelEvent>(HandleInitGrid, channel:(int)LevelEventType.InitGrid);
+            
             GEM.Subscribe<GridEvent>(HandleGetAxis, channel: (int)GridEventType.RequestAxis);
             GEM.Subscribe<GridEvent>(HandleGetAdjacent, channel: (int)GridEventType.RequestAdjacent);
             GEM.Subscribe<GridEvent>(HandleGetSameType, channel: (int)GridEventType.RequestSameType);
@@ -80,8 +92,10 @@ namespace Grid
             GEM.Subscribe<BlockEvent>(HandleBlockClicked, channel: (int)BlockEventType.BlockClicked);
         }
 
-        private void OnDestroy()
+        private void UnsubscribeEvents()
         {
+            GEM.Unsubscribe<LevelEvent>(HandleInitGrid, channel:(int)LevelEventType.InitGrid);
+            
             GEM.Unsubscribe<GridEvent>(HandleGetAxis, channel: (int)GridEventType.RequestAxis);
             GEM.Unsubscribe<GridEvent>(HandleGetAdjacent, channel: (int)GridEventType.RequestAdjacent);
             GEM.Unsubscribe<GridEvent>(HandleGetSameType, channel: (int)GridEventType.RequestSameType);
@@ -96,6 +110,11 @@ namespace Grid
 
         #region Event Handlers
 
+        private void HandleInitGrid(LevelEvent evt)
+        {
+            InitGrid(evt.GridSize, evt.LevelData);
+        }
+        
         private void HandleBlockPopped(BlockEvent evt)
         {
             var pos = evt.Block.GridPosition;

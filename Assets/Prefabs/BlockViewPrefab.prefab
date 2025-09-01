@@ -287,5 +287,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3d569cdac2044944b506155be2752f73, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  RectTransform: {fileID: 8327362633279532478}
-  Image: {fileID: 8327362633279532479}
+  RectTransform: {fileID: 0}
+  Image: {fileID: 0}
