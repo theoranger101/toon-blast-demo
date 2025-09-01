@@ -198,6 +198,7 @@ namespace LevelManagement.Editor
                                 {
                                     (int)ObstacleType.Balloon => $"O-1",
                                     (int)ObstacleType.WoodenBox => $"O-2",
+                                    _ => throw new ArgumentOutOfRangeException()
                                 };
                                 break;
                             case CellType.PowerUpBlock:
@@ -208,6 +209,7 @@ namespace LevelManagement.Editor
                                     (int)PowerUpType.Rocket => $"P-1",
                                     (int)PowerUpType.Bomb => $"P-2",
                                     (int)PowerUpType.DiscoBall => $"P-3",
+                                    _ => throw new ArgumentOutOfRangeException()
                                 };
                                 break;
                         }
