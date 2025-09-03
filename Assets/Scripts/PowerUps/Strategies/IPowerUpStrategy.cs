@@ -1,11 +1,16 @@
+using Blocks;
 using Blocks.BlockTypes;
 
 namespace PowerUps.Strategies
 {
     public interface IPowerUpStrategy
     {
-        public PowerUpBlock Owner { get; set; }
+        public PowerUpType PowerUpType { get; }
         
-        public void Activate();
+        public PowerUpBlock Owner { get; set; }
+
+        public void Plan(PowerUpResolver resolver);
+
+        public void Reset();
     }
 }

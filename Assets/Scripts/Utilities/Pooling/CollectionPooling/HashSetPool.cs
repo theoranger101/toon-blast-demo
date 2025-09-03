@@ -4,22 +4,22 @@ namespace Utilities.Pooling
 {
     public static class HashSetPool<T>
     {
-        private static readonly Queue<HashSet<T>> queue = new(5);
+        private static readonly Queue<HashSet<T>> s_Queue = new(5);
 
         public static HashSet<T> Get()
         {
-            if (queue.Count < 1)
+            if (s_Queue.Count < 1)
             {
-                queue.Enqueue(new HashSet<T>());
+                s_Queue.Enqueue(new HashSet<T>());
             }
 
-            return queue.Dequeue();
+            return s_Queue.Dequeue();
         }
 
         public static void Release(HashSet<T> list)
         {
             list.Clear();
-            queue.Enqueue(list);
+            s_Queue.Enqueue(list);
         }
     }
 }

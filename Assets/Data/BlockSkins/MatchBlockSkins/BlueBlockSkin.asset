@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f258d54cb1f24e1f8a46885d6f22ae4f, type: 3}
   m_Name: BlueBlockSkin
   m_EditorClassIdentifier: 
-  Category: 0
-  MatchBlockType: 0
+  Category: 1
+  MatchBlockType: 1
   PowerUpType: 0
   ObstacleType: 0
   OverridePrefab: {fileID: 6206146614970791800, guid: 46e5e8bed00a54fa1b265babdf177825, type: 3}

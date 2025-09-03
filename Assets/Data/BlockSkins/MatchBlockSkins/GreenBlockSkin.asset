@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f258d54cb1f24e1f8a46885d6f22ae4f, type: 3}
   m_Name: GreenBlockSkin
   m_EditorClassIdentifier: 
-  Category: 0
-  MatchBlockType: 1
+  Category: 1
+  MatchBlockType: 2
   PowerUpType: 0
   ObstacleType: 0
   OverridePrefab: {fileID: 2390441095839357263, guid: 81261593af258452f8c587a73930e8e9, type: 3}

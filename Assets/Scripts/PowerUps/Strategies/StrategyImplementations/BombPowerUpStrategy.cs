@@ -1,3 +1,4 @@
+using Blocks;
 using Blocks.BlockTypes;
 using Grid.EventImplementations;
 using UnityEngine;
@@ -5,11 +6,13 @@ using Utilities.Events;
 
 namespace PowerUps.Strategies
 {
-    public class BombPowerUpStrategy : IPowerUpStrategy
+    public sealed class BombPowerUpStrategy : IPowerUpStrategy
     {
+        public PowerUpType PowerUpType => PowerUpType.Bomb;
+        
         public PowerUpBlock Owner { get; set; }
         
-        public void Activate()
+        public void Plan(PowerUpResolver resolver)
         {
             if (Owner == null)
             {
@@ -20,12 +23,15 @@ namespace PowerUps.Strategies
 
             var evt = GridEvent.Get(Owner.GridPosition);
             evt.SendGlobal(channel: (int)GridEventType.RequestAdjacent);
-
-            Owner.PopTargetsThenOwner(evt.Blocks, popOwner: false);
+            
+            resolver.EnqueueMany(evt.Blocks, Owner);
             
             evt.Dispose();
+        }
+
+        public void Reset()
+        {
             Owner = null;
-            // TODO: pooling for strategies
         }
     }
 }

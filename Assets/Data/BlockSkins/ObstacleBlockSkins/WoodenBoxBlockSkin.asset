@@ -12,10 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f258d54cb1f24e1f8a46885d6f22ae4f, type: 3}
   m_Name: WoodenBoxBlockSkin
   m_EditorClassIdentifier: 
-  Category: 2
+  Category: 3
   MatchBlockType: 3
   PowerUpType: 0
-  ObstacleType: 1
+  ObstacleType: 2
   OverridePrefab: {fileID: 4016696893406861452, guid: 6d6009186dc5c403c8d89375495112a4, type: 3}
   Icon: {fileID: 21300000, guid: f7782f73b73af4b7dafd9eb3c28d371e, type: 3}
   IconPivot: {x: 0.5, y: 0.5}

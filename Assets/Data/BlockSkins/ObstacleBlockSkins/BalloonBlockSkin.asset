@@ -12,10 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f258d54cb1f24e1f8a46885d6f22ae4f, type: 3}
   m_Name: BalloonBlockSkin
   m_EditorClassIdentifier: 
-  Category: 2
-  MatchBlockType: 3
+  Category: 3
+  MatchBlockType: 1
   PowerUpType: 0
-  ObstacleType: 0
+  ObstacleType: 1
   OverridePrefab: {fileID: 1343883607185967447, guid: 9e4c020d362064d808c3bf6351982963, type: 3}
   Icon: {fileID: 21300000, guid: f9d6312ccd1fb45669f2cda7fc290d5e, type: 3}
   IconPivot: {x: 0.5, y: 0.5}

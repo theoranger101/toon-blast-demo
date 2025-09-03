@@ -67,6 +67,7 @@ namespace Blocks.BlockTypes
         public override void Release()
         {
             base.Release();
+            
             Type = default;
             Strength = -1;
         }

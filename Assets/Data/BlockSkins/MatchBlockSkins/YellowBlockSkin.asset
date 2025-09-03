@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f258d54cb1f24e1f8a46885d6f22ae4f, type: 3}
   m_Name: YellowBlockSkin
   m_EditorClassIdentifier: 
-  Category: 0
-  MatchBlockType: 3
+  Category: 1
+  MatchBlockType: 4
   PowerUpType: 0
   ObstacleType: 0
   OverridePrefab: {fileID: 4866281310492166825, guid: c4b7077ea8bc1464387e6ce56955944e, type: 3}

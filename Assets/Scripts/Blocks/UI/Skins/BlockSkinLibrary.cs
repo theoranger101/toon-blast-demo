@@ -42,19 +42,19 @@ namespace Blocks.UI.Skins
                 switch (skin.Category)
                 { 
                     case BlockCategory.Match:
-                        if (/*skin.MatchBlockType.HasValue && */(int) skin.MatchBlockType != categoryTypeId)
+                        if ((int)skin.MatchBlockType != categoryTypeId)
                         {
                             continue;
                         }
                         break;
                     case BlockCategory.PowerUp:
-                        if (/*skin.PowerUpType.HasValue && */(int)skin.PowerUpType != categoryTypeId)
+                        if ((int)skin.PowerUpType != categoryTypeId)
                         {
                             continue;
                         }
                         break;
                     case BlockCategory.Obstacle:
-                        if (/*skin.ObstacleType.HasValue && */(int)skin.ObstacleType != categoryTypeId)
+                        if ((int)skin.ObstacleType != categoryTypeId)
                         {
                             continue;
                         }

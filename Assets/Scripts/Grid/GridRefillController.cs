@@ -46,7 +46,7 @@ namespace Grid
             
             HashSetPool<int>.Release(columnsToRefill);
         }
-
+        
         private void RefillColumn(int columnIndex)
         {
             var requestEvt = GridEvent.Get(GridAxis.Column, new Vector2Int(columnIndex, 0));
@@ -99,7 +99,7 @@ namespace Grid
                 var randomSpawnData = new BlockSpawnData
                 {
                     Category = BlockCategory.Match,
-                    MatchBlockType = (MatchBlockType) Random.Range(0, 4),
+                    MatchBlockType = (MatchBlockType) Random.Range(1, 5),
                     GridPosition = new Vector2Int(columnIndex, fillY)
                 };
 

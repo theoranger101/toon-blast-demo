@@ -23,11 +23,13 @@ namespace Grid.UI
 
         private GlobalSettings m_Settings;
 
-        private Sequence m_BlockMovementSequence;
 
         [SerializeField] private BlockSkinLibrary m_BlockSkinLibrary; // TODO: INJECT 
 
         private BlockViewFactory m_BlockViewFactory;
+        
+        private Sequence m_BlockMovementSequence;
+
 
         private float m_DefaultStartPosition =>
             GridContainer.anchoredPosition.y + GridContainer.rect.height + m_Settings.BlockCellSize;
@@ -65,7 +67,12 @@ namespace Grid.UI
         
         private void HandleBlockRemoved(BlockEvent evt)
         {
-            var view = m_ActiveBlockViews[evt.Block];
+            if (!m_ActiveBlockViews.TryGetValue(evt.Block, out var view))
+            {
+                Debug.LogError($"Block {evt.Block.GetType()} was not found in view list, at position {evt.Block.GridPosition}");
+                return;
+            }
+            
             RemoveBlockView(view);
         }
 

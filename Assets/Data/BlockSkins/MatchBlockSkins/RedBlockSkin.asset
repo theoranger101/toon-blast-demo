@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f258d54cb1f24e1f8a46885d6f22ae4f, type: 3}
   m_Name: RedBlockSkin
   m_EditorClassIdentifier: 
-  Category: 0
-  MatchBlockType: 2
+  Category: 1
+  MatchBlockType: 3
   PowerUpType: 0
   ObstacleType: 0
   OverridePrefab: {fileID: 7808966310542772459, guid: 717aff49d7c0b45348d5e7617c9bedb5, type: 3}

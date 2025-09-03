@@ -28,11 +28,11 @@ namespace Grid
 
         #region Grid Actions Batching Struct & Variables
 
-        public readonly struct GridActionsResolutionScope : IDisposable
+        public readonly struct GridRefillResolutionScope : IDisposable
         {
             private readonly GridManager gridManager;
 
-            public GridActionsResolutionScope(GridManager gm)
+            public GridRefillResolutionScope(GridManager gm)
             {
                 gridManager = gm;
                 gridManager.BeginResolution();
@@ -44,7 +44,7 @@ namespace Grid
             }
         }
 
-        public GridActionsResolutionScope ResolutionBatch => new GridActionsResolutionScope(this);
+        public GridRefillResolutionScope ResolutionBatch => new GridRefillResolutionScope(this);
 
         private int m_BatchDepth = 0;
         private readonly HashSet<Vector2Int> m_EmptiedCells = new();
@@ -78,8 +78,8 @@ namespace Grid
 
         private void SubscribeEvents()
         {
-            GEM.Subscribe<LevelEvent>(HandleInitGrid, channel:(int)LevelEventType.InitGrid);
-            
+            GEM.Subscribe<LevelEvent>(HandleInitGrid, channel: (int)LevelEventType.InitGrid);
+
             GEM.Subscribe<GridEvent>(HandleGetAxis, channel: (int)GridEventType.RequestAxis);
             GEM.Subscribe<GridEvent>(HandleGetAdjacent, channel: (int)GridEventType.RequestAdjacent);
             GEM.Subscribe<GridEvent>(HandleGetSameType, channel: (int)GridEventType.RequestSameType);
@@ -87,15 +87,15 @@ namespace Grid
             GEM.Subscribe<GridEvent>(HandleClearPosition, channel: (int)GridEventType.ClearPosition);
             GEM.Subscribe<GridEvent>(HandleBlockMoved, channel: (int)GridEventType.BlockMoved);
 
-            GEM.Subscribe<BlockEvent>(HandleBlockAdded, channel:(int) BlockEventType.BlockCreated);
+            GEM.Subscribe<BlockEvent>(HandleBlockAdded, channel: (int)BlockEventType.BlockCreated);
             GEM.Subscribe<BlockEvent>(HandleBlockPopped, channel: (int)BlockEventType.BlockPopped);
             GEM.Subscribe<BlockEvent>(HandleBlockClicked, channel: (int)BlockEventType.BlockClicked);
         }
 
         private void UnsubscribeEvents()
         {
-            GEM.Unsubscribe<LevelEvent>(HandleInitGrid, channel:(int)LevelEventType.InitGrid);
-            
+            GEM.Unsubscribe<LevelEvent>(HandleInitGrid, channel: (int)LevelEventType.InitGrid);
+
             GEM.Unsubscribe<GridEvent>(HandleGetAxis, channel: (int)GridEventType.RequestAxis);
             GEM.Unsubscribe<GridEvent>(HandleGetAdjacent, channel: (int)GridEventType.RequestAdjacent);
             GEM.Unsubscribe<GridEvent>(HandleGetSameType, channel: (int)GridEventType.RequestSameType);
@@ -103,7 +103,7 @@ namespace Grid
             GEM.Unsubscribe<GridEvent>(HandleClearPosition, channel: (int)GridEventType.ClearPosition);
             GEM.Unsubscribe<GridEvent>(HandleBlockMoved, channel: (int)GridEventType.BlockMoved);
 
-            GEM.Unsubscribe<BlockEvent>(HandleBlockAdded, channel:(int) BlockEventType.BlockCreated);
+            GEM.Unsubscribe<BlockEvent>(HandleBlockAdded, channel: (int)BlockEventType.BlockCreated);
             GEM.Unsubscribe<BlockEvent>(HandleBlockPopped, channel: (int)BlockEventType.BlockPopped);
             GEM.Unsubscribe<BlockEvent>(HandleBlockClicked, channel: (int)BlockEventType.BlockClicked);
         }
@@ -114,13 +114,13 @@ namespace Grid
         {
             InitGrid(evt.GridSize, evt.LevelData);
         }
-        
+
         private void HandleBlockPopped(BlockEvent evt)
         {
             var pos = evt.Block.GridPosition;
 
             m_EmptiedCells.Add(pos);
-            
+
             RemoveBlock(pos);
             DamageAdjacentObstacles(pos);
         }
@@ -399,8 +399,6 @@ namespace Grid
                 return null;
             }
             
-            using(var powerUpEvt = GridEvent.Get())
-            
             return (PowerUpBlock)spawnedBlock;
         }
 
@@ -424,7 +422,7 @@ namespace Grid
 
                 obstacle.ReduceStrength();
             }
-            
+
             ListPool<Block>.Release(adjacentBlocks);
         }
 
@@ -456,7 +454,7 @@ namespace Grid
             {
                 return;
             }
-            
+
             /*
             // check for duplicate entries before taking action
             for (var i = 0; i < m_EmptiedCells.Count - 1; i++)
@@ -465,8 +463,8 @@ namespace Grid
                 {
                     if (m_EmptiedCells[i] == m_EmptiedCells[j])
                     {
-                        
-                    }   
+
+                    }
                 }
             }
             */

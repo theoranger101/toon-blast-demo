@@ -12,9 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f258d54cb1f24e1f8a46885d6f22ae4f, type: 3}
   m_Name: DiscoBallBlockSkin
   m_EditorClassIdentifier: 
-  Category: 1
+  Category: 2
   MatchBlockType: 3
-  PowerUpType: 2
+  PowerUpType: 3
   ObstacleType: 0
   OverridePrefab: {fileID: 3458127564998690671, guid: e6329da76e49743f4a205d67d9400ea1, type: 3}
   Icon: {fileID: 21300000, guid: fe388a02edc984ebda52220bbb3beb4a, type: 3}

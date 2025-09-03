@@ -4,23 +4,23 @@ namespace Utilities.Pooling
 {
     public static class DictionaryPool<TKey, TValue>
     {
-        private static readonly Queue<Dictionary<TKey, TValue>> queue = new(5);
+        private static readonly Queue<Dictionary<TKey, TValue>> s_Queue = new(5);
         
         
         public static Dictionary<TKey, TValue> Get()
         {
-            if (queue.Count < 1)
+            if (s_Queue.Count < 1)
             {
-                queue.Enqueue(new Dictionary<TKey, TValue>());
+                s_Queue.Enqueue(new Dictionary<TKey, TValue>());
             }
 
-            return queue.Dequeue();
+            return s_Queue.Dequeue();
         }
 
         public static void Release(Dictionary<TKey, TValue> dict)
         {
             dict.Clear();
-            queue.Enqueue(dict);
+            s_Queue.Enqueue(dict);
         }
     }
 }

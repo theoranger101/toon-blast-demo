@@ -18,31 +18,21 @@ namespace Blocks.BlockTypes
             Type = spawnData.PowerUpType ?? throw new Exception("PowerUpType is required for PowerUpBlock");
             GridPosition = spawnData.GridPosition;
             
-            Strategy = PowerUpStrategyFactory.GetStrategy(Type);
-            Strategy.Owner = this;
+            Strategy = PowerUpStrategyFactory.GetStrategy(Type, this);
         }
 
         public override void Pop()
         {
-            if (IsPopped)
-            {
-                Debug.LogWarning("Trying to pop a block that has already been popped. Block at position " +
-                                 GridPosition + " is already popped.");
-                return;
-            }
-
             Debug.Log($"Activated PowerUpBlock {Type} at position {GridPosition}");
-            
-            Strategy.Activate();
             base.Pop();
         }
 
         public override void Release()
         {
             base.Release();
-            // TODO: add strategy pooling -> Strategy.Release();
-            Strategy = null;
+            
             Type = default;
+            PowerUpStrategyFactory.ReleaseStrategy(Strategy);
         }
     }
 }

@@ -6,30 +6,34 @@ namespace Blocks
 {
     public enum BlockCategory
     {
-        Match = 0,
-        PowerUp = 1,
-        Obstacle = 2,
+        None = 0,
+        Match = 1,
+        PowerUp = 2,
+        Obstacle = 3,
     }
     
     public enum MatchBlockType
     {
-        Blue = 0,
-        Green = 1,
-        Red = 2,
-        Yellow = 3,
+        None = 0,
+        Blue = 1,
+        Green = 2,
+        Red = 3,
+        Yellow = 4,
     }
 
     public enum PowerUpType
     {
-        Rocket = 0,
-        Bomb = 1,
-        DiscoBall = 2,
+        None = 0,
+        Rocket = 1,
+        Bomb = 2,
+        DiscoBall = 3,
     }
 
     public enum ObstacleType
     {
-        Balloon = 0,
-        WoodenBox = 1,
+        None = 0,
+        Balloon = 1,
+        WoodenBox = 2,
     }
 
     public abstract class Block

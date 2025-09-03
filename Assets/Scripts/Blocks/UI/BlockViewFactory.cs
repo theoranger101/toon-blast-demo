@@ -11,8 +11,7 @@ namespace Blocks.UI
 
         private readonly Dictionary<BlockView, GameObjectPool<BlockView>> m_Pools = new();
         private readonly Dictionary<BlockView, GameObjectPool<BlockView>> m_InstanceToPool = new();
-
-
+        
         public BlockViewFactory(BlockSkinLibrary skinLibrary)
         {
             m_SkinLibrary = skinLibrary;
@@ -37,7 +36,7 @@ namespace Blocks.UI
 
             if (skin == null)
             {
-                Debug.LogError($"No BlockSkin available for block with category {block.GetCategory()} and type {block.GetType()}!");
+                Debug.LogError($"No BlockSkin available for block with category {block.GetCategory()} and type {block.GetType()} with typeId {block.GetTypeId()}!");
                 return null;
             }
             

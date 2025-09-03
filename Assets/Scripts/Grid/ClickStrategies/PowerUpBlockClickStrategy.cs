@@ -1,5 +1,6 @@
 using System.Collections;
 using Blocks;
+using PowerUps;
 
 namespace Grid.ClickStrategies
 {
@@ -7,9 +8,12 @@ namespace Grid.ClickStrategies
     {
         public IEnumerator ResolveClick(GridManager grid, Block block)
         {
-            using (grid.ResolutionBatch)
+            using (var resolver = new PowerUpResolver(grid))
             {
-                block.Pop();
+                resolver.SeedFromClick(block);
+                resolver.PlanAll();
+                
+                resolver.Apply();
             }
             
             yield break;
