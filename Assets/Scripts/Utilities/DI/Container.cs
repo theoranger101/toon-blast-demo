@@ -103,7 +103,7 @@ namespace Utilities.DI
             }
             
             // for each parameter for the chosen constructor,
-            // get registered object or create a new per Get function.
+            // get a registered object or create a new per Get function.
             var args = ctor.GetParameters().Select(p => Get(p.ParameterType)).ToArray();
             
             return Activator.CreateInstance(type, args);
